@@ -1,6 +1,5 @@
 package net.planetjones.quiz_hoster.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -12,16 +11,14 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   @Override
-  public void configureMessageBroker(MessageBrokerRegistry config) {
+  public void configureMessageBroker(@SuppressWarnings("null") MessageBrokerRegistry config) {
     config.enableSimpleBroker("/topic");
     config.setApplicationDestinationPrefixes("/app");
   }
 
   @Override
-  public void registerStompEndpoints(StompEndpointRegistry registry) {
+  public void registerStompEndpoints(@SuppressWarnings("null") StompEndpointRegistry registry) {
     registry.addEndpoint("/web-socket").setAllowedOriginPatterns("*");
   }
-
-
 
 }

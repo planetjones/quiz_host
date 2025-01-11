@@ -1,0 +1,27 @@
+{
+    "id": 1,
+    "description": "This is a sample quiz",
+    "questions": [
+      {
+        "id": 1,
+        "question": "What is the capital of France?",
+        "type": "single_answer",
+        "options": ["Berlin", "Madrid", "Paris", "Rome"],
+        "correct_answers": ["Paris"] 
+      },
+      {
+        "id": 2,
+        "question": "Which of these are programming languages?",
+        "type": "multiple_answer",
+        "options": ["Java", "HTML", "Python", "Photoshop"],
+        "correct_answers": ["Java", "Python"] 
+      },
+      { 
+        "id": 3, 
+        "question": "Is this a quiz?", 
+        "type": "single_answer", 
+        "options": ["Yes", "No"], 
+        "correct_answers": ["Yes"]  
+      }
+    ]
+  }
