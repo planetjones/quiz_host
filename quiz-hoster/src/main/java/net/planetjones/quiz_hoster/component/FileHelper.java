@@ -54,19 +54,13 @@ public class FileHelper {
             try {
                 quiz = objectMapper.readValue(inputStream, Quiz.class);
                 quizzes.put(quiz.getId(), quiz);
-            } catch (StreamReadException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (DatabindException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                logger.error("Error reading quiz from file: {}", file.getFilename(), e);
             }
             
         });
 
+        logger.info("Loaded {} quizzes", quizzes.keySet());
         return quizzes;
     }
 }

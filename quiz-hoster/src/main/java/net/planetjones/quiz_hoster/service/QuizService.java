@@ -35,11 +35,17 @@ public class QuizService {
         messagingTemplate.convertAndSend(topic, question);
     }
 
-    public void startQuiz(Long quizId) {
-        throw new UnsupportedOperationException();
+    public QuizSession startQuiz(Long quizId) {
+        System.err.println(quizzes.values());
+        System.err.println(quizzes.keySet());
+        Quiz quiz = quizzes.get(quizId);
+        logger.info("Starting quiz: {}", quiz.getDescription());
+        QuizSession session = new QuizSession(quiz);
+        quizSession.put(session.getId(), session);
+        return session;
     }
 
-    public List<Quiz> findAllQuizzes() {
+    public List<Quiz> findAllQuizzes() { 
         return new ArrayList<>(quizzes.values());
     }
 

@@ -4,6 +4,95 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Hoster</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #4caf50;
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1rem 0;
+            background: #333;
+            color: white;
+        }
+
+        footer p {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+    </style>
+    <script>
+        async function startQuiz() {
+            try {
+                const response = await fetch('/api/quiz/begin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ quizId: 1 })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert('Quiz started successfully!');
+                    console.log(result);
+                } else {
+                    alert('Failed to start quiz. Please try again.');
+                    console.error('Error:', response.statusText);
+                }
+            } catch (error) {
+                alert('An error occurred while starting the quiz.');
+                console.error('Error:', error);
+            }
+        }
+    </script>
 </head>
 <body>
     <header>
@@ -12,12 +101,12 @@
     <main>
         <section>
             <h2>Start a New Quiz</h2>
+            <p>Click the button below to begin your quiz journey!</p>
             <button onclick="startQuiz()">Start Quiz</button>
         </section>
     </main>
     <footer>
         <p>&copy; 2023 Quiz Hoster. All rights reserved.</p>
     </footer>
-
 </body>
 </html>
