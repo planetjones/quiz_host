@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Administration Page</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .quiz-item {
+            cursor: pointer;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .quiz-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            background-color: #f8f8f8;
+        }
+
+        #quizList {
+            display: grid;
+            gap: 15px;
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Administration</title>
+    <style>
+        .quiz-item {
+            cursor: pointer;
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ccc;
+        }
+        .quiz-item:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Choose the quiz to start</h1>
+    <div id="quizList"></div>
+
+    <script>
+        // Fetch quiz list when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchQuizList();
+        });
+
+        function fetchQuizList() {
+            fetch('/api/quiz/list')
+                .then(response => response.json())
+                .then(quizzes => {
+                    displayQuizzes(quizzes);
+                })
+                .catch(error => {
+                    console.error('Error fetching quizzes:', error);
+                });
+        }
+
+        function displayQuizzes(quizzes) {
+            const quizList = document.getElementById('quizList');
+            quizList.innerHTML = '';
+
+            quizzes.forEach(quiz => {
+                console.log(quiz);
+                const quizElement = document.createElement('div');
+                quizElement.className = 'quiz-item';
+                quizElement.textContent = quiz.description;
+                quizElement.onclick = () => beginQuiz(quiz.id);
+                quizList.appendChild(quizElement);
+            });
+        }
+
+        function beginQuiz(quizId) {
+            fetch('/api/quiz/begin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({quizId: quizId})
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Quiz started successfully');
+                response.json().then(data => {
+                    window.location.href = `/admin_play.html?quizSessionId=${data.id}`;
+                });
+                } else {
+                    console.error('Failed to start quiz');
+                }
+            })
+            .catch(error => {
+                console.error('Error starting quiz:', error);
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Session Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .message-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .message {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Quiz Session Monitor</h1>
+    <div class="message-container" id="messages"></div>
+
+    <script>
+  
+        const urlParams = new URLSearchParams(window.location.search);
+        const quizSessionId = urlParams.get('quizSessionId');
+
+        const client = new StompJs.Client({
+            brokerURL: 'ws://localhost:8080/web-socket',
+            debug: function (str) {
+                console.log(str);
+            },
+            reconnectDelay: 5000,
+            heartbeatIncoming: 4000,
+            heartbeatOutgoing: 4000,
+        });
+
+        client.onConnect = function (frame) {
+            console.log('connected to Stomp');
+        };
+
+        client.onStompError = function (frame) {
+            console.log('Broker reported error: ' + frame.headers['message']);
+            console.log('Additional details: ' + frame.body);
+        };
+
+        client.activate();
+
+        // if (!quizSessionId) {
+        //     document.body.innerHTML = '<h1>Error: quizSessionId parameter is required</h1>';
+        // } else {
+        //     // Connect to STOMP endpoint
+        //     const socket = new SockJS('/web-socket');
+        //     const stompClient = Stomp.over(socket);
+
+        //     stompClient.connect({}, function(frame) {
+        //         console.log('Connected: ' + frame);
+        //         stompClient.subscribe('/topic/quiz/' + quizSessionId, function(message) {
+        //             const messageDiv = document.createElement('div');
+        //             messageDiv.className = 'message';
+        //             messageDiv.textContent = message.body;
+        //             document.getElementById('messages').appendChild(messageDiv);
+        //         });
+        //     }, function(error) {
+        //         console.error('STOMP error: ' + error);
+        //         const messageDiv = document.createElement('div');
+        //         messageDiv.className = 'message';
+        //         messageDiv.style.borderLeft = '4px solid #dc3545';
+        //         messageDiv.textContent = 'Connection error: ' + error;
+        //         document.getElementById('messages').appendChild(messageDiv);
+        //     });
+        // }
+    </script>
+</body>
+
+</html>
