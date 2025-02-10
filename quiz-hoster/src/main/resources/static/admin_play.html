@@ -39,12 +39,22 @@
 
 <body>
     <h1>Quiz Session Monitor</h1>
+    <div>
+        <a id='join-quiz-url' href=''></a>
+    </div>
+
     <div class="message-container" id="messages"></div>
 
     <script>
   
         const urlParams = new URLSearchParams(window.location.search);
+
         const quizSessionId = urlParams.get('quizSessionId');
+
+        const quizUrl = 'http://localhost:8080/joinQuiz?quizId=' + quizSessionId;
+        const linkElement = document.getElementById('join-quiz-url');
+        linkElement.href = quizUrl;
+        linkElement.innerHTML = quizUrl;
 
         const client = new StompJs.Client({
             brokerURL: 'ws://localhost:8080/web-socket',

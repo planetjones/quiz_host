@@ -36,8 +36,6 @@ public class QuizService {
     }
 
     public QuizSession startQuiz(Long quizId) {
-        System.err.println(quizzes.values());
-        System.err.println(quizzes.keySet());
         Quiz quiz = quizzes.get(quizId);
         logger.info("Starting quiz: {}", quiz.getDescription());
         QuizSession session = new QuizSession(quiz);
