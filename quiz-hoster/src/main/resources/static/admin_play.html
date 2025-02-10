@@ -38,7 +38,7 @@
 </head>
 
 <body>
-    <h1>Quiz Session Monitor</h1>
+    <h1>Quiz Session Monitor </h1>
     <div>
         <a id='join-quiz-url' href=''></a>
     </div>
@@ -51,7 +51,7 @@
 
         const quizSessionId = urlParams.get('quizSessionId');
 
-        const quizUrl = 'http://localhost:8080/joinQuiz?quizId=' + quizSessionId;
+        const quizUrl = 'http://localhost:8080/player_play.html?quizSessionId=' + quizSessionId;
         const linkElement = document.getElementById('join-quiz-url');
         linkElement.href = quizUrl;
         linkElement.innerHTML = quizUrl;
@@ -77,30 +77,7 @@
 
         client.activate();
 
-        // if (!quizSessionId) {
-        //     document.body.innerHTML = '<h1>Error: quizSessionId parameter is required</h1>';
-        // } else {
-        //     // Connect to STOMP endpoint
-        //     const socket = new SockJS('/web-socket');
-        //     const stompClient = Stomp.over(socket);
-
-        //     stompClient.connect({}, function(frame) {
-        //         console.log('Connected: ' + frame);
-        //         stompClient.subscribe('/topic/quiz/' + quizSessionId, function(message) {
-        //             const messageDiv = document.createElement('div');
-        //             messageDiv.className = 'message';
-        //             messageDiv.textContent = message.body;
-        //             document.getElementById('messages').appendChild(messageDiv);
-        //         });
-        //     }, function(error) {
-        //         console.error('STOMP error: ' + error);
-        //         const messageDiv = document.createElement('div');
-        //         messageDiv.className = 'message';
-        //         messageDiv.style.borderLeft = '4px solid #dc3545';
-        //         messageDiv.textContent = 'Connection error: ' + error;
-        //         document.getElementById('messages').appendChild(messageDiv);
-        //     });
-        // }
+      
     </script>
 </body>
 

@@ -11,8 +11,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import net.planetjones.quiz_hoster.component.FileHelper;
+import net.planetjones.quiz_hoster.domain.Player;
 import net.planetjones.quiz_hoster.domain.Quiz;
 import net.planetjones.quiz_hoster.domain.QuizSession;
+import net.planetjones.quiz_hoster.domain.exception.QuizSessionNotFoundException;
 
 @Service
 public class QuizService {
@@ -33,6 +35,20 @@ public class QuizService {
 
     public void sendQuestion(String topic, String question) {
         messagingTemplate.convertAndSend(topic, question);
+    }
+
+    public void registerPlayer(QuizSession session, String playerName) {
+        session.addPlayer(new Player(playerName));
+    }
+
+    public QuizSession findQuizSession(String quizSessionId) {
+        QuizSession session = quizSession.get(quizSessionId);
+
+        if(session == null) {
+            throw new QuizSessionNotFoundException("Quiz session not found: " + quizSessionId);
+        }
+
+        return session;
     }
 
     public QuizSession startQuiz(Long quizId) {
