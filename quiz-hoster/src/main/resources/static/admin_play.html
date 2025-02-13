@@ -45,6 +45,19 @@
 
     <div class="message-container" id="messages"></div>
 
+    <div id="player-container" style="
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 20px;
+        padding: 15px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    ">
+        <!-- Player divs will be added here dynamically -->
+    </div>
+
     <script>
   
         const urlParams = new URLSearchParams(window.location.search);
@@ -68,6 +81,20 @@
 
         client.onConnect = function (frame) {
             console.log('connected to Stomp');
+
+            client.subscribe('/topic/' + quizSessionId, message => {
+                console.log(`Received_x: ${message.body}`);
+                const messageBody = JSON.parse(message.body);
+                
+                if (messageBody.eventType === 'PLAYER_REGISTERED') {
+                    const playerName = messageBody.playerName;  
+                    const playerDiv = document.createElement('div');
+                    playerDiv.innerHTML = playerName;
+                    document.getElementById('player-container').appendChild(playerDiv);
+                }
+            }
+            );
+
         };
 
         client.onStompError = function (frame) {

@@ -20,13 +20,8 @@
         });
 
         client.onConnect = function (frame) {
-
-
             const urlParams = new URLSearchParams(window.location.search);
             quizSessionId = urlParams.get('quizSessionId');
-            
-
-
         };
 
         client.onStompError = function (frame) {
@@ -34,10 +29,26 @@
             console.log('Additional details: ' + frame.body);
         };
 
-
-
         client.activate();
 
+        function joinQuiz() {
+            client.publish({
+                destination: '/app/registerForQuiz',
+                body: JSON.stringify({
+                    quizSessionId: quizSessionId,
+                    playerName: document.getElementById('playerName').value
+                })
+            });
+
+            client.subscribe('/topic/players/' + quizSessionId + '/' + document.getElementById('playerName').value, message => {
+                const messageBody = message.body;
+                console.log(`Received_x: ${messageBody}`);
+                if (messageBody === 'PLAYER_REGISTERED') {
+                    document.getElementById('message-container').innerHTML = `<div class="message">${document.getElementById('playerName').value} registered. Waiting for quiz to begin...</div>`;
+                }
+            }
+            );
+        }
 
     </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +89,7 @@
     <div>
         <a id='join-quiz-url' href=''></a>
     </div>
-    <div class="message-container" style="margin-bottom: 20px;">
+    <div id="message-container" class="message-container" style="margin-bottom: 20px;">
         <form id="playerForm" style="display: flex; gap: 10px; align-items: center;">
             <input type="text" id="playerName" placeholder="Enter your name"
                 style="flex: 1; padding: 10px; border: 2px solid #007bff; border-radius: 4px; font-size: 16px;"
@@ -86,15 +97,7 @@
             <button type="button"
                 style="padding: 10px 20px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; transition: background-color 0.3s;"
                 onmouseover="this.style.backgroundColor='#0056b3'" onmouseout="this.style.backgroundColor='#007bff'"
-                onclick="client.publish({ 
-                    destination: '/app/registerForQuiz', 
-                    body: JSON.stringify({
-                        quizSessionId: quizSessionId,
-                        playerName: document.getElementById('playerName').value
-                    })
-                }); client.subscribe('/topic/players/' + document.getElementById('playerName').value, message =>
-                    console.log(`Received_x: ${message.body}`)
-                );">
+                onclick="joinQuiz()">
                 Join Quiz
             </button>
         </form>
@@ -102,7 +105,7 @@
 
     <div class="message-container" id="messages"></div>
 
-   
+
 </body>
 
 </html>
