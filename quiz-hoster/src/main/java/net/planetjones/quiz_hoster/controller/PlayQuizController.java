@@ -44,17 +44,4 @@ public class PlayQuizController {
     messagingTemplate.convertAndSend(quizSessionTopic, new PlayerEvent(registration.getPlayerName(), "PLAYER_REGISTERED", 0));
   }
 
-  @MessageMapping("/startQuiz")
-  public void findNextQuestion(String aString) throws Exception {
-    Thread.sleep(1000); // simulated delay
-    logger.info("Received message: " + aString);
-
-    for (int i = 0; i < 30; i++) {
-      Thread.sleep(1000); // wait for 1 second
-      long questionId = 1L + i;
-
-      quizService.sendQuestion("/topic/quiz/", null);
-    }
-  }
-
 }

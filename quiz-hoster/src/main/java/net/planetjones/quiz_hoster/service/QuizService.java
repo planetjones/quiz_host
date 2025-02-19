@@ -44,7 +44,7 @@ public class QuizService {
     public QuizSession findQuizSession(String quizSessionId) {
         QuizSession session = quizSession.get(quizSessionId);
 
-        if(session == null) {
+        if (session == null) {
             throw new QuizSessionNotFoundException("Quiz session not found: " + quizSessionId);
         }
 
@@ -59,7 +59,12 @@ public class QuizService {
         return session;
     }
 
-    public List<Quiz> findAllQuizzes() { 
+    public void beginQuiz(String sessionId) {
+        QuizSession session = findQuizSession(sessionId);
+       
+    }
+
+    public List<Quiz> findAllQuizzes() {
         return new ArrayList<>(quizzes.values());
     }
 
