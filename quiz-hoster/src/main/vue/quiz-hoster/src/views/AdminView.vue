@@ -18,6 +18,34 @@ async function fetchData() {
     }
 }
 
+function startQuiz(router, quizId) {
+    console.log('start quiz', quizId)
+
+    fetch((`${API_BASE_URL}/api/quiz/begin`), {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ quizId: quizId })
+    })
+        .then(response => {
+            if (response.ok) {
+                
+                response.json().then(data => {
+                    console.log('Quiz started successfully');
+                    console.log(this.$router, data.id);
+                    router.push({ name: 'AdminLobby', params: { quizSessionId: data.id } })
+                });
+            } else {
+                console.error('Failed to start quiz')
+            }
+        })
+        .catch(error => {
+            console.error('Error starting quiz:', error);
+        });
+
+}
+
 onMounted(() => {
     fetchData()
 })
@@ -43,9 +71,7 @@ onMounted(() => {
                 <div class="card-body">
                     <h5 class="card-title">{{ item.description }}</h5>
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" 
-                        class="btn btn-primary" 
-                        @click="$router.push({ name: 'AdminLobby', params: { quizId: item.id } })">Play now</a>
+                    <a href="#" class="btn btn-primary" @click="startQuiz(this.$router, item.id)">Play now</a>
                 </div>
             </div>
         </div>

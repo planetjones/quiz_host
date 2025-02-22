@@ -15,7 +15,7 @@ const router = createRouter({
       component: () => import('../views/AdminQuizView.vue'),
     },
     {
-      path: '/adminLobby/:quizId',
+      path: '/adminLobby/:quizSessionId',
       name: 'AdminLobby',
       component: () => import('../views/AdminLobby.vue'),
     },
