@@ -24,9 +24,7 @@ import HelloWorld from './components/HelloWorld.vue'
   </main>
 
 
-  <footer class="container-fluid">
-    Footer
-  </footer>
+
 </template>
 
 <style scoped></style>

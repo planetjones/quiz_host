@@ -20,11 +20,20 @@ const router = createRouter({
       component: () => import('../views/AdminLobby.vue'),
     },
     {
+      path: '/play/:quizSessionId',
+      name: 'PlayerLobby',
+      component: () => import('../views/PlayerLobby.vue'),
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue'),
     },
   ],
+})
+
+router.beforeEach((to, from) => {
+  document.title = to.meta?.title ?? 'Quiz Hoster'
 })
 
 export default router

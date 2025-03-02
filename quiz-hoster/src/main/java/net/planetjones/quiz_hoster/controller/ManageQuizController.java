@@ -1,11 +1,16 @@
 package net.planetjones.quiz_hoster.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 
 import net.planetjones.quiz_hoster.domain.PlayerEvent;
 import net.planetjones.quiz_hoster.domain.Quiz;
@@ -52,8 +62,23 @@ public class ManageQuizController {
   @MessageMapping("/startQuiz")
   public void startQuiz(String quizSessionId) throws Exception {
     logger.info("Starting quiz {}", quizSessionId);
-    
   }
 
+  @GetMapping(value = "/api/quiz/image", produces = MediaType.IMAGE_PNG_VALUE)
+  public byte[] getQuizImage(@RequestParam("quizUrl") String quizUrl) throws Exception {
+   logger.info("Requested image for quiz url {}", quizUrl);
+
+    int width = 300;
+    int height = 300;
+
+    QRCodeWriter qrCodeWriter = new QRCodeWriter();
+    BitMatrix bitMatrix = qrCodeWriter.encode(quizUrl, BarcodeFormat.QR_CODE, width, height);
+    BufferedImage bufferedImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    ImageIO.write(bufferedImage, "PNG", outputStream);
+
+    return outputStream.toByteArray();
+  }
 
 }
